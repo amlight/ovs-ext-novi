@@ -26,6 +26,20 @@ docker builder prune -a
 docker image prune -a
 ```
 
+## ARM Version
+
+To get the version for ARM architecture procesors run the previous scripts in a ARM OS or follow the next commands:
+```
+docker run --privileged --rm tonistiigi/binfmt --install arm64
+docker buildx create --name mybuilder --use
+docker buildx build --platform linux/arm64 -t ovs-ext-novi --load .
+docker create --name ovs-ext-novi ovs-ext-novi
+docker cp ovs-ext-novi:/ovs-ext-novi.tgz .
+docker rm -f ovs-ext-novi
+```
+
+NOTE: This uses emulation of ARM architecture so it is going to take several minutes to complete (~50 minutes).
+
 ## Supported Features
 
 The following OFPAT\_EXPERIMENTER custom action types are supported:
@@ -47,3 +61,4 @@ The following OFPAT\_EXPERIMENTER custom action types are supported:
 
 - Build process was based on https://github.com/tsaarni/docker-deb-builder
 - OpenVSwitch documentation for adding vendor extension (experimenter actions): https://docs.openvswitch.org/en/latest/topics/ovs-extensions/
+- Docker buildx creation: https://docs.docker.com/reference/cli/docker/buildx/create/
